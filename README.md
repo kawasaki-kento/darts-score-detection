@@ -7,28 +7,28 @@ This application detects the Bull (the center of the dartboard) and the arrow by
 
 
 # Table of contents
- - [Requirements]()
- - [Advance preparation]()
- - [SetUp]()
- - [File Details]()
- - [Running the application]()
- - [How it works]()
- - [Data collection]()
- - [Training for area discrimination]()
- - [Rewriting annotations]()
- - [Tranfer Learning with SSD-Mobilenet]()
- - [Future Direction]()
+ - [Requirements](#requirements)
+ - [Advance preparation](#advance-preparation)
+ - [SetUp](#setup)
+ - [File Details](#file-details)
+ - [Running the application](#running-the-application)
+ - [How it works](#how-it-works)
+ - [Data collection](data-collection)
+ - [Training for area discrimination](#training-for-area-discrimination)
+ - [Rewriting annotations](#rewriting-annotations)
+ - [Tranfer Learning with SSD-Mobilenet](#tranfer-learning-with-ssd-mobilenet)
+ - [Future Direction](#future-direction)
 
 # Requirements
  - Hardware
-  - [Jetson Nano](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-nano/education-projects/)
-  - [Logitech HD Pro Webcam C920](https://www.amazon.com/Logitech-Widescreen-Recording-Certified-Refurbished/dp/B010BJJAVY/ref=sr_1_3?dchild=1&keywords=C920n&qid=1621944348&sr=8-3)
-  - Memory card(64GB)
+  + [Jetson Nano](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-nano/education-projects/)
+  + [Logitech HD Pro Webcam C920](https://www.amazon.com/Logitech-Widescreen-Recording-Certified-Refurbished/dp/B010BJJAVY/ref=sr_1_3?dchild=1&keywords=C920n&qid=1621944348&sr=8-3)
+  + Memory card(64GB)
 
  - Software
-  - Python==3.6.9
-  - torch==1.6.0
-  - onnxruntime==1.8.0
+  + Python==3.6.9
+  + torch==1.6.0
+  + onnxruntime==1.8.0
 
 # Advance preparation
 Before starting this project, please follow the information below to set up.
@@ -42,7 +42,7 @@ Before starting this project, please follow the information below to set up.
 Clone this project from the GitHub repository.
 
 ```
-   git@github.com:kawasaki-kento/DartsScoreDetection.git
+  git@github.com:kawasaki-kento/darts-score-detection.git
 ```
 
 Connect the camera (C920) to the Jetson Nano and verify that the camera recognizes it with the following code.
@@ -116,7 +116,7 @@ This application uses SSD-Mobilenet, but it only detects the Bull (center of the
 # Data collection
 To collect data, I stabed arrows at the dartboard and annotated the Bull (the center of the dartboard) and the arrows. The annotation process was done with the camera set up so that the dartboard was directly in front of it, as shown in the gif below.
 
-![annotaions] (/img/annotaions.gif)
+![annotations] (/img/annotations.gif)
 
 The arrows were annotated with the score of the position where they were stuck as labels. Thus, the number of labels is 60 (20 kinds of scores x 3 kinds). I have collected more than 1000 such annotation data in the following directory.
 
