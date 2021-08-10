@@ -21,14 +21,14 @@ This application detects the Bull (the center of the dartboard) and the arrow by
 
 # Requirements
  - Hardware
-  + [Jetson Nano](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-nano/education-projects/)
-  + [Logitech HD Pro Webcam C920](https://www.amazon.com/Logitech-Widescreen-Recording-Certified-Refurbished/dp/B010BJJAVY/ref=sr_1_3?dchild=1&keywords=C920n&qid=1621944348&sr=8-3)
-  + Memory card(64GB)
+  	+ [Jetson Nano](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-nano/education-projects/)
+  	+ [Logitech HD Pro Webcam C920](https://www.amazon.com/Logitech-Widescreen-Recording-Certified-Refurbished/dp/B010BJJAVY/ref=sr_1_3?dchild=1&keywords=C920n&qid=1621944348&sr=8-3)
+  	+ Memory card(64GB)
 
  - Software
-  + Python==3.6.9
-  + torch==1.6.0
-  + onnxruntime==1.8.0
+  	+ Python==3.6.9
+  	+ torch==1.6.0
+  	+ onnxruntime==1.8.0
 
 # Advance preparation
 Before starting this project, please follow the information below to set up.
@@ -54,8 +54,8 @@ Connect the camera (C920) to the Jetson Nano and verify that the camera recogniz
 Once you have confirmed that the camera is connected, adjust the position of the dartboard and the camera. The camera should be positioned directly in front of the dartboard, and the distance between the camera and the dartboard should be about 60cm to 80cm. If necessary, use a tripod.
 
 # File Details
-```
-.
+
+darts-score-detection
 „¥„Ÿ„Ÿ models
 „    „¥„Ÿ„Ÿ dnn 
 „    „    „¥„Ÿ„Ÿ dnn_model.pth  : Neural Network Model for area discrimination
@@ -69,7 +69,7 @@ Once you have confirmed that the camera is connected, adjust the position of the
 „¥„Ÿ„Ÿ feature_creation.py         : Create features from annotated data
 „¥„Ÿ„Ÿ score_detection_training.py : Run training for area discrimination
 „¤„Ÿ„Ÿ README.md
-```
+
 
 # Running the application
 Mount the "darts_score_detection" directory in a container and run darts_score_detection.py as shown below. For details on each argument, please refer to [here](https://github.com/dusty-nv/jetson-inference/blob/master/docs/detectnet-console-2.md).
