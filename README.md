@@ -1,9 +1,9 @@
 # Introduction
-We have created an application that automatically calculates darts scores by applying object detection. As you can see in the gif below, it detects the arrow stuck in the dartboard and displays the score. 
+I have created an application that automatically calculates darts scores by applying object detection. As you can see in the gif below, it detects the arrow stuck in the dartboard and displays the score. 
 
 ![demo](/img/demo.gif)
 
-This application detects the Bull (the center of the dartboard) and the arrow by transfer learning from SSD-Mobilenet. In general, SSD-Mobilenet can detect objects such as dartboards and arrows, but it is difficult to determine the score. For example, since there are 61 different patterns of dart scores, which are combinations of numbers 1-20 and multiples (Single, Double, Triple) + Bull, we have to make sure that a part of the dartboard is detected accordingly. Therefore, in this project, we created the original dataset and added a neural network to estimate the scores, thus making Darts Score Detection a reality.
+This application detects the Bull (the center of the dartboard) and the arrow by transfer learning from SSD-Mobilenet. In general, SSD-Mobilenet can detect objects such as dartboards and arrows, but it is difficult to determine the score. For example, since there are 61 different patterns of dart scores, which are combinations of numbers 1-20 and multiples (Single, Double, Triple) + Bull, we have to make sure that a part of the dartboard is detected accordingly. Therefore, in this project, I created the original dataset and added a neural network to estimate the scores, thus making Darts Score Detection a reality.
 
 
 # Table of contents
@@ -54,22 +54,22 @@ Connect the camera (C920) to the Jetson Nano and verify that the camera recogniz
 Once you have confirmed that the camera is connected, adjust the position of the dartboard and the camera. The camera should be positioned directly in front of the dartboard, and the distance between the camera and the dartboard should be about 60cm to 80cm. If necessary, use a tripod.
 
 # File Details
-
+```
 darts-score-detection
-„¥„Ÿ„Ÿ models
-„    „¥„Ÿ„Ÿ dnn 
-„    „    „¥„Ÿ„Ÿ dnn_model.pth  : Neural Network Model for area discrimination
-„    „    „¤„Ÿ„Ÿ dnn_model.onnx : Neural network model for area discrimination (ONNX format)
-„    „¤„Ÿ„Ÿ ssd
-„        „¥„Ÿ„Ÿ score_labels.txt    : Label before annotation change
-„        „¥„Ÿ„Ÿ labels.txt          : Label after annotation change
-„        „¤„Ÿ„Ÿ ssd-mobilenet.onnx  : Trained SSD-Mobilenet to detect Bull and Arrow
-„¥„Ÿ„Ÿ darts_score_detection.py    : Running Darts Score Detection
-„¥„Ÿ„Ÿ change_annotations.py       : Change the annotations
-„¥„Ÿ„Ÿ feature_creation.py         : Create features from annotated data
-„¥„Ÿ„Ÿ score_detection_training.py : Run training for area discrimination
-„¤„Ÿ„Ÿ README.md
-
+â”œâ”€â”€ models
+â”‚   â”œâ”€â”€ dnn 
+â”‚   â”‚   â”œâ”€â”€ dnn_model.pth  : Neural Network Model for area discrimination
+â”‚   â”‚   â””â”€â”€ dnn_model.onnx : Neural network model for area discrimination (ONNX format)
+â”‚   â””â”€â”€ ssd
+â”‚       â”œâ”€â”€ score_labels.txt    : Label before annotation change
+â”‚       â”œâ”€â”€ labels.txt          : Label after annotation change
+â”‚       â””â”€â”€ ssd-mobilenet.onnx  : Trained SSD-Mobilenet to detect Bull and Arrow
+â”œâ”€â”€ darts_score_detection.py    : Running Darts Score Detection
+â”œâ”€â”€ change_annotations.py       : Change the annotations
+â”œâ”€â”€ feature_creation.py         : Create features from annotated data
+â”œâ”€â”€ score_detection_training.py : Run training for area discrimination
+â””â”€â”€ README.md
+```
 
 # Running the application
 Mount the "darts_score_detection" directory in a container and run darts_score_detection.py as shown below. For details on each argument, please refer to [here](https://github.com/dusty-nv/jetson-inference/blob/master/docs/detectnet-console-2.md).
@@ -90,11 +90,9 @@ When you run it, the camera capture screen will open and the Bull (center of the
 
 ![detecting bull](/img/Bull.PNG)
 
-After confirming that the Bull (the center of the dartboard) has been successfully detected, the game will start. Try to shoot arrows at the dartboard.
+After confirming that the Bull (the center of the dartboard) has been successfully detected, the game will start. Try to shoot arrows at the dartboard. If all goes well, you should see the scores as follows.
 
 ![detecting arrow](/img/Arrow.PNG)
-
-If all goes well, you should see the scores as follows.
 
 # How it works
 This application uses SSD-Mobilenet, but it only detects the Bull (center of the dartboard) and the arrow. SSD-Mobilenet alone is not enough to estimate the score. To determine the score, we use the information of the position and angle of the arrow from the center point of the dartboard. The flow of score calculation is as follows.
@@ -127,7 +125,7 @@ This annotation data will be used to Training for area discrimination at first, 
 
 
 # Training for area discrimination
-There are single, double, and triple areas on the dartboard, but the relative distance from the Bull (the center point of the dartboard) alone is not accurate enough to identify them. So, using a neural network, I will implement a model to determine the area where the arrow was stuck. The following code will create four features from the data contained in the "Annotaions" folder created during data collection: Bounding Box Width, Bounding Box Height, Distance from Bull (center point of the dartboard), and Angle from Bull (center point of the dartboard).
+There are single, double, and triple areas on the dartboard, but the relative distance from the Bull (the center point of the dartboard) alone is not accurate enough to identify them. So, using a neural network, I implemented a model to determine the area where the arrow was stuck. The following code will create four features from the data contained in the "Annotaions" folder created during data collection: Bounding Box Width, Bounding Box Height, Distance from Bull (center point of the dartboard), and Angle from Bull (center point of the dartboard).
 
 ```
 python feature_creation.py
@@ -170,7 +168,7 @@ python change_annotations.py
 ```
 
 # Tranfer Learning with SSD-Mobilenet
-We performed transfer learning with SSD-Mobilenet using data with rewritten annotations. We specified the directory containing the data collected in the data collection (labels rewritten) and ran train_ssd.py as shown below. Since the training epoch was 200 and long study, it is recommended to do it on a desktop PC with GPU. The detailed transfer learning method using SSD-Mobilenet is described below.
+I ran transfer learning with SSD-Mobilenet using data with rewritten annotations. I specified the directory containing the data collected in the data collection (labels rewritten) and ran train_ssd.py as shown below. Since the training epoch was 200 and long study, it is recommended to do it on a desktop PC with GPU. The detailed transfer learning method using SSD-Mobilenet is described below.
 
 [Re-training SSD-Mobilenet](https://github.com/dusty-nv/jetson-inference/blob/master/docs/pytorch-ssd.md)
 
@@ -195,7 +193,7 @@ When the training is finished, a trained model will be created, and now we will 
 ```
 
 # Future Direction
-The current model has been learned from thousands of data, so the prediction accuracy is still low. In the future, we plan to improve the prediction accuracy by processing more informative data, such as predicting the score from the image data of the bounding box using CNN, in addition to the relative distance and angle of the arrow to the Bull (the center of the dartboard).
+The current model has been learned from thousands of data, so the prediction accuracy is still low. In the future, I plan to improve the prediction accuracy by processing more informative data, such as predicting the score from the image data of the bounding box using CNN, in addition to the relative distance and angle of the arrow to the Bull (the center of the dartboard).
 
 # References
  - [dusty-nv/jetson-inference](https://github.com/dusty-nv/jetson-inference)
