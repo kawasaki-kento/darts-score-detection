@@ -30,16 +30,17 @@ def read_old_annotation_file(file_path):
         return [i.rstrip() for i in f if i.rstrip() != 'Bull']
 
 if __name__ == '__main__':
-    print(os.path.dirname(opt.labels_txt))
     old_labels = read_old_annotation_file(opt.labels_txt)
 
     for i in os.listdir(opt.annotations_dir):
       read_path = opt.annotations_dir + i
       save_path = opt.new_annotations_dir + i
       tree = change_annotations(read_path, old_labels, opt.new_label)
-      tree.write(save_path, encoding='UTF-8')
+      tree.write(save_path, encoding='utf-8')
 
+    # new_labels.txt
     new_labels = os.path.join(os.path.dirname(opt.labels_txt), 'new_labels.txt')
     with open(new_labels, 'w', encoding='utf-8') as f:
+      f.write('BACKGROUND\n')
       f.write('Bull\n')
       f.write(opt.new_label+'\n')

@@ -1,5 +1,5 @@
 # Introduction
-I have created an application that automatically calculates darts scores by applying object detection. As you can see in the gif below, it detects the arrow stuck in the dartboard and displays the score. 
+I created an application that automatically calculates darts scores by applying object detection. As you can see in the gif below, it detects the arrow stuck in the dartboard and displays the score. 
 
 ![demo](/img/demo.gif)
 
@@ -9,15 +9,15 @@ This application detects the Bull (the center of the dartboard) and the arrow by
 # Table of contents
  - [Requirements](#requirements)
  - [Advance preparation](#advance-preparation)
- - [SetUp](#setup)
- - [File Details](#file-details)
+ - [Setup](#setup)
+ - [File details](#file-details)
  - [Running the application](#running-the-application)
  - [How it works](#how-it-works)
  - [Data collection](#data-collection)
  - [Training for area discrimination](#training-for-area-discrimination)
  - [Rewriting annotations](#rewriting-annotations)
- - [Tranfer Learning with SSD-Mobilenet](#tranfer-learning-with-ssd-mobilenet)
- - [Future Direction](#future-direction)
+ - [Transfer learning with SSD-Mobilenet](#tranfer-learning-with-ssd-mobilenet)
+ - [Future direction](#future-direction)
 
 # Requirements
  - Hardware
@@ -38,7 +38,7 @@ Before starting this project, please follow the information below to set up.
  - [Running the Docker Container](https://github.com/dusty-nv/jetson-inference/blob/master/docs/aux-docker.md)
 
 
-# SetUp
+# Setup
 Clone this project from the GitHub repository.
 
 ```
@@ -53,21 +53,23 @@ Connect the camera (C920) to the Jetson Nano and verify that the camera recogniz
 
 Once you have confirmed that the camera is connected, adjust the position of the dartboard and the camera. The camera should be positioned directly in front of the dartboard, and the distance between the camera and the dartboard should be about 60cm to 80cm. If necessary, use a tripod.
 
-# File Details
+# File details
+The details of the files in this repository are as follows.
+
 ```
 darts-score-detection
 ├── models
 │   ├── dnn 
-│   │   ├── dnn_model.pth  : Neural Network Model for area discrimination
+│   │   ├── dnn_model.pth  : Neural Network model for area discrimination
 │   │   └── dnn_model.onnx : Neural network model for area discrimination (ONNX format)
 │   └── ssd
-│       ├── score_labels.txt    : Label before annotation change
-│       ├── labels.txt          : Label after annotation change
+│       ├── labels.txt          : Label before annotation change
+│       ├── new_labels.txt      : Label after annotation change
 │       └── ssd-mobilenet.onnx  : Trained SSD-Mobilenet to detect Bull and Arrow
-├── darts_score_detection.py    : Running Darts Score Detection
-├── change_annotations.py       : Change the annotations
-├── feature_creation.py         : Create features from annotated data
-├── score_detection_training.py : Run training for area discrimination
+├── darts_score_detection.py     : Running Darts Score Detection
+├── change_annotations.py        : Change the annotations
+├── feature_creation.py          : Create features from annotation data
+├── score_detection_training.py  : Run training for area discrimination
 └── README.md
 ```
 
@@ -79,7 +81,7 @@ Mount the "darts_score_detection" directory in a container and run darts_score_d
   docker/run.sh --volume ~/darts_score_detection:/darts_score_detection
   python3 darts_score_detection.py
    --model=./models/ssd/ssd-mobilenet.onnx
-   --labels=./models/ssd/labels.txt
+   --labels=./models/ssd/new_labels.txt
    --input-blob=input_0
    --output-cvg=scores
    --output-bbox=boxes
@@ -116,7 +118,7 @@ To collect data, I stabed arrows at the dartboard and annotated the Bull (the ce
 
 ![annotations](/img/annotations.gif)
 
-The arrows were annotated with the score of the position where they were stuck as labels. Thus, the number of labels is 60 (20 kinds of scores x 3 kinds). I have collected more than 1000 such annotation data in the following directory.
+The arrows were annotated with the score of the position where they were stuck as labels. Thus, the number of labels is 61 (20 kinds of scores x 3 kinds + Bull). I have collected more than 1000 such annotation data in the following directory.
 
 ```
 /jetson-inference/python/training/detection/ssd/data/darts_score_detection/Annotations
@@ -153,7 +155,7 @@ multiple = np.argmax(ort_session.run(None, ort_inputs)[0])
 The trained dnn_model.onnx will be used in darts_score_detection.py to predict the area where the arrow will stick.
 
 # Rewriting annotations
-If we use the annotations created during data collection, we will end up with a model with low accuracy, so we will change the annotation data. There are 60 different labels for arrows, all of which have been replaced by the label "Arrow". 
+If we use the annotations created during data collection, we will end up with a model with low accuracy, so we will change the annotation data. There are 61 different labels for arrows, all of which have been replaced by the label "Arrow". 
 
 ![rewriting_annotations](/img/rewriting_annotations.PNG)
 
@@ -167,7 +169,7 @@ python change_annotations.py
  --new-annotations-dir=/jetson-inference/python/training/detection/ssd/data/darts_score_detection/NewAnnotations
 ```
 
-# Tranfer Learning with SSD-Mobilenet
+# Transfer learning with SSD-Mobilenet
 I ran transfer learning with SSD-Mobilenet using data with rewritten annotations. I specified the directory containing the data collected in the data collection (labels rewritten) and ran train_ssd.py as shown below. Since the training epoch was 200 and long study, it is recommended to do it on a desktop PC with GPU. The detailed transfer learning method using SSD-Mobilenet is described below.
 
 [Re-training SSD-Mobilenet](https://github.com/dusty-nv/jetson-inference/blob/master/docs/pytorch-ssd.md)
@@ -192,7 +194,7 @@ When the training is finished, a trained model will be created, and now we will 
    python3 onnx_export.py --model-dir=models/darts_score_detection
 ```
 
-# Future Direction
+# Future direction
 The current model has been learned from thousands of data, so the prediction accuracy is still low. In the future, I plan to improve the prediction accuracy by processing more informative data, such as predicting the score from the image data of the bounding box using CNN, in addition to the relative distance and angle of the arrow to the Bull (the center of the dartboard).
 
 # References
