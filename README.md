@@ -16,7 +16,7 @@ This application detects the Bull (the center of the dartboard) and the arrow by
  - [Data collection](#data-collection)
  - [Training for area discrimination](#training-for-area-discrimination)
  - [Rewriting annotations](#rewriting-annotations)
- - [Transfer learning with SSD-Mobilenet](#tranfer-learning-with-ssd-mobilenet)
+ - [Transfer learning with SSD-Mobilenet](#transfer-learning-with-ssd-mobilenet)
  - [Future direction](#future-direction)
 
 # Requirements
